@@ -165,8 +165,6 @@ namespace GitHooksUtility
                         var newHook = AssetDatabase.LoadAssetAtPath<Object>(path);
                         //newHook = EditorGUIUtility.Load(filePath);
                         configuration.hooks.Add(newHook);
-                        Debug.Log(Configuration == configuration);
-                        Debug.Log(newHook);
                         EditorUtility.SetDirty(configuration);
                         AssetDatabase.SaveAssets();
                     });
