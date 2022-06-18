@@ -160,7 +160,7 @@ namespace GitHooksUtility
                     AssetDatabase.CopyAsset(AssetDatabase.GUIDToAssetPath(guid), path);
 
 
-                    PostProcessImportAsset.OnPostProcessOnce((IEnumerable<string> files) =>
+                    PostProcessImportAsset.OnPostProcessAssetOnce(path, (IEnumerable<string> files) =>
                     {
                         var newHook = AssetDatabase.LoadAssetAtPath<Object>(path);
                         //newHook = EditorGUIUtility.Load(filePath);
@@ -181,7 +181,7 @@ namespace GitHooksUtility
             AssetDatabase.CreateAsset(configuration, "Assets/Editor Default Resources/" + CONFIGURATION_FILE);
             copyingConfiguration = false;
 
-            PostProcessImportAsset.OnPostProcessOnce((_) => CopyHooks());
+            PostProcessImportAsset.OnPostProcessAssetOnce("Assets/Editor Default Resources/" + CONFIGURATION_FILE, (_) => CopyHooks());
         }
 
         public static bool IsConfigurationCopied()
@@ -248,6 +248,18 @@ namespace GitHooksUtility
             onPostProcessAllAssets += Callback;
         }
 
+        public static void OnPostProcessAssetOnce(string assetPath, UnityEngine.Events.UnityAction<IEnumerable<string>> action)
+        {
+            void Callback(IEnumerable<string> args)
+            {
+                if (args.Contains(assetPath))
+                {
+                    action.Invoke(args);
+                    onPostProcessAllAssets -= Callback;
+                }
+            }
+            onPostProcessAllAssets += Callback;
+        }
 
         static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
