@@ -2,12 +2,17 @@
   "name": "com.ersagun.git-hooks-utility",
   "version": "0.1.0",
   "displayName": "Git Hooks Utility",
-  "description": "This is an example package",
+  "description": "Automatically shared git hooks for Unity projects.",
   "unity": "2019.1",
   "unityRelease": "0b5",
   "keywords": [
     "git",
-    "githook"
+    "githook",
+    "githooks",
+    "git-hooks",
+    "hook",
+    "hooks",
+    "meta"
   ],
   "author": {
     "name": "Ersagun Kuruca",
