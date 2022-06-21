@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using UnityEngine;
 
 namespace GitHooksUtility
@@ -22,13 +23,25 @@ namespace GitHooksUtility
             {
                 if (!System.IO.File.Exists(targetPath))
                 {
-                    Debug.Log("This file already exists" + targetPath);
+                    UnityEngine.Debug.Log("This file already exists" + targetPath);
                     return;
                 }
             }
             else
             {
                 System.IO.File.Copy(sourcePath, targetPath, true);
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+                ProcessStartInfo startInfo = new ProcessStartInfo()
+                {
+                    FileName = "/bin/bash",
+                    Arguments = "-c \" chmod +x " + targetPath.Replace(" ","\\ ") + " \" ",
+ 
+                    CreateNoWindow = true
+                };
+ 
+                Process proc = new Process() { StartInfo = startInfo, };
+                proc.Start();
+#endif
             }
 
         }
